@@ -1,20 +1,31 @@
 package problemD.fashion
 
+import java.nio.file.Files
+import java.nio.file.Paths
+
+val rd = Files.newBufferedReader(Paths.get("src/problemD/D-large-practice.in"))!!
+val writer = Files.newBufferedWriter(Paths.get("src/problemD/D-large-practice.out"))!!
+
 fun main(args: Array<String>) {
-    val case = readLine()!!.toInt()
-    for (id in 1..case)
-        show(id)
+    try {
+        val case = rd.readLine().toInt()
+        for (id in 1..case)
+            show(id)
+    } finally {
+        rd.close()
+        writer.close()
+    }
 }
 
 fun show(id: Int) {
-    var (n, m) = readLine()!!.split(' ').map(String::toInt)
+    val (n, m) = rd.readLine().split(" ").map(String::toInt)
     val stage = mutableSetOf<Pair>()
     val row = mutableSetOf<Int>()
     val col = mutableSetOf<Int>()
     val diag = mutableSetOf<Int>()
     val anti = mutableSetOf<Int>()
     for (t in 0..m - 1) {
-        val line = readLine()!!.split(" ")
+        val line = rd.readLine().split(" ")
         val style = line[0]
         val i = line[1].toInt()
         val j = line[2].toInt()
@@ -29,11 +40,11 @@ fun show(id: Int) {
         }
     }
 
-    var models = mutableListOf<List<String>>()
-    var list = mutableListOf<Pair>()
+    val models = mutableListOf<List<String>>()
+    val list = mutableListOf<Pair>()
     for (i in 1..n) {
         (i..n).mapTo(list) { Pair(i, it) }
-        (i+1..n).mapTo(list) { Pair(it, i) }
+        (i + 1..n).mapTo(list) { Pair(it, i) }
         for (p in list) {
             var addTimes = false
             var addPlus = false
@@ -51,15 +62,15 @@ fun show(id: Int) {
                 models.add(listOf("o", p.first.toString(), p.second.toString()))
             else {
                 if (addTimes)
-                    models.add(listOf("x" , p.first.toString(), p.second.toString()))
+                    models.add(listOf("x", p.first.toString(), p.second.toString()))
                 if (addPlus)
                     models.add(listOf("+", p.first.toString(), p.second.toString()))
             }
         }
     }
-    println("Case #$id: ${row.size + diag.size} ${models.size}")
+    writer.write("Case #$id: ${row.size + diag.size} ${models.size}\n")
     for (md in models)
-        println("${md[0]} ${md[1]} ${md[2]}")
+        writer.write("${md[0]} ${md[1]} ${md[2]}\n")
 }
 
 data class Pair(val first: Int, val second: Int)
